@@ -11,17 +11,20 @@ class AdminSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $admin = Admin::where('username', 'superadmin')->first();
+        $admin =
+            [
+                'name' => 'Super Admin',
+                'email' => 'superadmin@example.com',
+                'username' => 'superadmin',
+                'password' => Hash::make('12345678'),
+            ];
 
-        if (is_null($admin)) {
-            $admin           = new Admin();
-            $admin->name     = "Super Admin";
-            $admin->email    = "susheelcs24@gmail.com";
-            $admin->username = "susheel.sahoo";
-            $admin->password = Hash::make('Ankit@143@');
-            $admin->save();
-        }
+        Admin::create($admin);
+
+        // Run factory to create additional admins with unique details.
+        Admin::factory()->count(10)->create();
+        $this->command->info('Admins table seeded with 11 admins!');
     }
 }
