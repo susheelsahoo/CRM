@@ -79,8 +79,6 @@ Leads - Admin Panel
                                     <td><span class="badge badge-info">{{ ucfirst($lead->status) }}</span></td>
                                     <td>
                                         <a class="btn btn-info text-white" href="{{ route('admin.leads.show', $lead->id) }}">View</a>
-                                        <a class="btn btn-warning text-white" href="{{ route('admin.leads.edit', $lead->id) }}">Edit</a>
-
                                         <a class="btn btn-danger text-white" href="{{ route('admin.leads.destroy', $lead->id) }}"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $lead->id }}').submit();">
                                             Delete

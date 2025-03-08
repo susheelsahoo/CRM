@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Lead;
-use App\Models\User;
+use App\Models\Admin;
 
 class LeadController extends Controller
 {
@@ -17,7 +18,7 @@ class LeadController extends Controller
 
     public function create()
     {
-        $users = User::all();
+        $users = Admin::all();
         return view('backend.pages.leads.create', compact('users'));
     }
 
@@ -31,7 +32,6 @@ class LeadController extends Controller
             'company' => 'nullable|string|max:255',
             'message' => 'nullable|string',
             'status' => 'required|in:new,contacted,qualified,lost',
-            'assigned_to' => 'nullable|exists:users,id',
             'date_of_purchase' => 'nullable|date',
             'amount' => 'nullable|numeric|min:0',
             'card_number' => 'nullable|string|max:16',
@@ -39,10 +39,26 @@ class LeadController extends Controller
             'cvv' => 'nullable|string|max:4',
         ]);
 
-        Lead::create($request->all());
-        return redirect()->route('leads.index')->with('success', 'Lead created successfully!');
-    }
+        $currentUser = Auth::guard('admin')->user();
 
+        $lead = Lead::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'company' => $request->company,
+            'message' => $request->message,
+            'status' => $request->status,
+            'date_of_purchase' => $request->date_of_purchase,
+            'amount' => $request->amount,
+            'card_number' => $request->card_number,
+            'expiry_date' => $request->expiry_date,
+            'cvv' => $request->cvv,
+            'assigned_to' => $currentUser ? $currentUser->id : null,
+        ]);
+
+        return redirect()->route('admin.leads.index')->with('success', 'Lead created successfully!');
+    }
     public function show(Lead $lead)
     {
         return view('backend.pages.leads.show', compact('lead'));

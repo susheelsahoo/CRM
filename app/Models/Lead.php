@@ -28,6 +28,6 @@ class Lead extends Model
 
     public function assignedUser()
     {
-        return $this->belongsTo(User::class, 'assigned_to');
+        return $this->belongsTo(Admin::class, 'assigned_to');
     }
 }
