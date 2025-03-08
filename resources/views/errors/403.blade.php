@@ -1,25 +1,16 @@
-@extends('marketing.skeleton')
+@extends('errors.errors_layout')
 
-@section('content')
+@section('title')
+    403 - Access Denied
+@endsection
 
-  <body class="marketing register">
-  <div class="container">
-    <div class="row">
-      <div class="col-12 col-md-6 offset-md-3 offset-md-3-right">
-
-        <div class="alert alert-danger">
-          <h3><i class="fa fa-ban"></i> @lang('auth.not_authorized')</h3>
-
-          @if(isset($exception) && $exception->getMessage())
-            <p class="message">{{ $exception->getMessage() }}</p>
-          @endif
-
-          <p><a href="">{{ trans('auth.back_homepage') }}</a></p>
-        </div>
-
-      </div>
-    </div>
-  </div>
-  </body>
-
+@section('error-content')
+    <h2>403</h2>
+    <p>Access to this resource on the server is denied</p>
+    <hr>
+    <p class="mt-2">
+        {{ $exception->getMessage() }}
+    </p>
+    <a href="{{ route('admin.dashboard') }}">Back to Dashboard</a>
+    <a href="{{ route('admin.login') }}">Login Again !</a>
 @endsection

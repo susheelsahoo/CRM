@@ -14,8 +14,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
+        'guard' => 'admin',
+        'passwords' => 'admins',
     ],
 
     /*
@@ -42,8 +42,20 @@ return [
         ],
 
         'api' => [
-            'driver' => 'passport',
+            'driver' => 'token',
             'provider' => 'users',
+            'hash' => false,
+        ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+
+        'admin_api' => [
+            'driver' => 'token',
+            'provider' => 'admins',
+            'hash' => false,
         ],
     ],
 
@@ -67,23 +79,19 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User\User::class,
+            'model' => App\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
     ],
 
     /*
     |--------------------------------------------------------------------------
     | Resetting Passwords
     |--------------------------------------------------------------------------
-    |
-    | Here you may set the options for resetting passwords including the view
-    | that is your password reset e-mail. You may also set the name of the
-    | table that maintains all of the reset tokens for your application.
     |
     | You may specify multiple password reset configurations if you have more
     | than one user table or model in the application and you want to have
@@ -98,7 +106,12 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'email' => 'auth.emails.password',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'admins' => [
+            'provider' => 'admins',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,
@@ -118,37 +131,4 @@ return [
 
     'password_timeout' => 10800,
 
-    /*
-    | Invitation Email
-    |--------------------------------------------------------------------------
-    |
-    | Parameters for the invitation email send, requested by a user.
-    | Expire is in days.
-    |
-    */
-
-    'invitation' => [
-        'expire' => 2,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Recovery codes generation
-    |--------------------------------------------------------------------------
-    |
-    | Recovery codes can be used to access your account in the event you lost
-    | access to the device used to generate or receive two-factor
-    | authentication codes.
-    |
-    | * count: number of recovery codes to generate
-    | * blocks: number of blocks in one code
-    | * chars: number of characters per block
-    |
-    */
-
-    'recovery' => [
-        'count' => 8,
-        'blocks' => 2,
-        'chars' => 4,
-    ],
 ];

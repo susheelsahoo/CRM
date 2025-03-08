@@ -1,11 +1,5 @@
 <?php
 
-/**
- * ⚠️ Editing not allowed except for 'en' language.
- *
- * @see https://github.com/monicahq/monica/blob/main/docs/contribute/translate.md for translations.
- */
-
 return [
 
     /*
@@ -19,7 +13,7 @@ return [
     |
     */
 
-    'previous' => '❮ Previous',
-    'next'     => 'Next ❯',
+    'previous' => '&laquo; Previous',
+    'next' => 'Next &raquo;',
 
 ];
