@@ -38,13 +38,9 @@ class LeadController extends Controller
             'expiry_date' => 'nullable|string|max:5',
             'cvv' => 'nullable|string|max:4',
         ]);
-<<<<<<< HEAD
-        $currentUser = Auth::guard('admin')->user();
-=======
 
         $currentUser = Auth::guard('admin')->user();
 
->>>>>>> bf8303cf0b1f366ebc84ade42ae879c9261c5f5f
         $lead = Lead::create([
             'name' => $request->name,
             'email' => $request->email,
