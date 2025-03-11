@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->text('message')->nullable();
             $table->enum('status', ['new', 'contacted', 'qualified', 'lost'])->default('new');
             $table->unsignedBigInteger('assigned_to')->nullable(); // User who manages the lead
-            $table->foreign('assigned_to')->references('id')->on('admin')->onDelete('set null');
+            $table->foreign('assigned_to')->references('id')->on('admins')->onDelete('set null');
 
             // Transaction Details
             $table->date('date_of_purchase')->nullable();
