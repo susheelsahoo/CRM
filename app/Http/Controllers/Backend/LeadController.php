@@ -10,9 +10,22 @@ use App\Models\Admin;
 
 class LeadController extends Controller
 {
+    protected $currentUser;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->currentUser = Auth::guard('admin')->user();
+            return $next($request);
+        });
+    }
+
     public function index()
     {
-        $leads = Lead::latest()->paginate(10);
+        $leads = Lead::where('assigned_to', $this->currentUser->id)
+            ->latest()
+            ->paginate(10);
+
         return view('backend.pages.leads.index', compact('leads'));
     }
 
