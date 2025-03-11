@@ -39,7 +39,7 @@ class LeadController extends Controller
             'cvv' => 'nullable|string|max:4',
         ]);
 
-        $currentUser = Auth::guard('admin')->user()->id;
+        $currentUser = Auth::guard('admin')->user();
 
         $lead = Lead::create([
             'name' => $request->name,
