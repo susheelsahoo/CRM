@@ -1,4 +1,3 @@
-
 @extends('backend.layouts.master')
 
 @section('title')
@@ -76,7 +75,7 @@ Admin Edit - Admin Panel
                                 <label for="password">Assign Roles</label>
                                 <select name="roles[]" id="roles" class="form-control select2" multiple required>
                                     @foreach ($roles as $role)
-                                        <option value="{{ $role->name }}" {{ $admin->hasRole($role->name) ? 'selected' : '' }}>{{ $role->name }}</option>
+                                    <option value="{{ $role->name }}" {{ $admin->hasRole($role->name) ? 'selected' : '' }}>{{ ucfirst($role->name) }}</option>
                                     @endforeach
                                 </select>
                             </div>

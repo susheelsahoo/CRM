@@ -18,19 +18,51 @@ class AdminsController extends Controller
     {
         $this->checkAuthorization(auth()->user(), ['admin.view']);
 
-        return view('backend.pages.admins.index', [
-            'admins' => Admin::all(),
-        ]);
+        $user = auth()->user();
+        $admins = collect(); // Default empty collection
+
+        if ($user->hasRole('superadmin')) {
+            // Superadmin sees all admins
+            $admins = Admin::all();
+        } elseif ($user->hasRole('admin')) {
+            // Admin sees only Managers they created
+            $admins = Admin::where('created_by', $user->id)
+                ->whereHas('roles', function ($query) {
+                    $query->where('name', 'manager');
+                })->get();
+        } elseif ($user->hasRole('manager')) {
+            // Manager sees only Employees they created
+            $admins = Admin::where('created_by', $user->id)
+                ->whereHas('roles', function ($query) {
+                    $query->where('name', 'employee');
+                })->get();
+        } elseif ($user->hasRole('employee')) {
+            // Employee sees only their own profile
+            $admins = Admin::where('id', $user->id)->get();
+        }
+
+        return view('backend.pages.admins.index', compact('admins'));
     }
 
     public function create(): Renderable
     {
         $this->checkAuthorization(auth()->user(), ['admin.create']);
 
+        $user = auth()->user();
+        $roles = collect();
+        if ($user->hasRole('superadmin')) {
+            $roles = Role::all();
+        } elseif ($user->hasRole('admin')) {
+            $roles = Role::whereIn('name', ['manager', 'employee'])->get();
+        } elseif ($user->hasRole('manager')) {
+            $roles = Role::where('name', 'employee')->get();
+        }
+
         return view('backend.pages.admins.create', [
-            'roles' => Role::all(),
+            'roles' => $roles,
         ]);
     }
+
 
     public function store(AdminRequest $request): RedirectResponse
     {
@@ -41,6 +73,7 @@ class AdminsController extends Controller
         $admin->username = $request->username;
         $admin->email = $request->email;
         $admin->password = Hash::make($request->password);
+        $admin->created_by = auth()->id();
         $admin->save();
 
         if ($request->roles) {
@@ -56,11 +89,30 @@ class AdminsController extends Controller
         $this->checkAuthorization(auth()->user(), ['admin.edit']);
 
         $admin = Admin::findOrFail($id);
-        return view('backend.pages.admins.edit', [
-            'admin' => $admin,
-            'roles' => Role::all(),
-        ]);
+        $user = auth()->user();
+        $roles = collect();
+        if (
+            $user->hasRole('superadmin') ||
+            ($user->hasRole('admin') && $admin->parent_id == $user->id) ||
+            ($user->hasRole('manager') && $admin->parent_id == $user->id)
+        ) {
+            if ($user->hasRole('superadmin')) {
+                $roles = Role::all();
+            } elseif ($user->hasRole('admin')) {
+                $roles = Role::whereIn('name', ['manager', 'employee'])->get();
+            } elseif ($user->hasRole('manager')) {
+                $roles = Role::where('name', 'employee')->get();
+            }
+
+            return view('backend.pages.admins.edit', [
+                'admin' => $admin,
+                'roles' => $roles,
+            ]);
+        }
+
+        abort(403, 'Unauthorized');
     }
+
 
     public function update(AdminRequest $request, int $id): RedirectResponse
     {

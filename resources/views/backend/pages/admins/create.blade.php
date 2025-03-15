@@ -1,4 +1,3 @@
-
 @extends('backend.layouts.master')
 
 @section('title')
@@ -46,7 +45,7 @@ Admin Create - Admin Panel
                 <div class="card-body">
                     <h4 class="header-title">Create New Admin</h4>
                     @include('backend.layouts.partials.messages')
-                    
+
                     <form action="{{ route('admin.admins.store') }}" method="POST">
                         @csrf
                         <div class="form-row">
@@ -76,7 +75,7 @@ Admin Create - Admin Panel
                                 <label for="password">Assign Roles</label>
                                 <select name="roles[]" id="roles" class="form-control select2" multiple required>
                                     @foreach ($roles as $role)
-                                        <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                    <option value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -85,7 +84,7 @@ Admin Create - Admin Panel
                                 <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" required value="{{ old('username') }}">
                             </div>
                         </div>
-                        
+
                         <button type="submit" class="btn btn-primary mt-4 pr-4 pl-4">Save</button>
                         <a href="{{ route('admin.admins.index') }}" class="btn btn-secondary mt-4 pr-4 pl-4">Cancel</a>
                     </form>
@@ -93,7 +92,7 @@ Admin Create - Admin Panel
             </div>
         </div>
         <!-- data table end -->
-        
+
     </div>
 </div>
 @endsection

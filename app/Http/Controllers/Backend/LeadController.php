@@ -22,9 +22,27 @@ class LeadController extends Controller
 
     public function index()
     {
-        $leads = Lead::where('assigned_to', $this->currentUser->id)
-            ->latest()
-            ->paginate(10);
+        $this->checkAuthorization(auth()->user(), ['leads.view']);
+        $user = Auth::guard('admin')->user();
+        $leads = collect(); // Default empty collection
+
+        if ($user->hasRole('superadmin')) {
+            // Superadmin sees all leads
+            $leads = Lead::latest()->paginate(10);
+        } elseif ($user->hasRole('admin')) {
+            // Admin sees leads assigned to managers and employees they created
+            $leads = Lead::whereHas('assignedUser', function ($query) use ($user) {
+                $query->where('created_by', $user->id);
+            })->latest()->paginate(10);
+        } elseif ($user->hasRole('manager')) {
+            // Manager sees only leads assigned to their employees
+            $leads = Lead::whereHas('assignedUser', function ($query) use ($user) {
+                $query->where('created_by', $user->id);
+            })->latest()->paginate(10);
+        } elseif ($user->hasRole('employee')) {
+            // Employee sees only leads assigned to them
+            $leads = Lead::where('assigned_to', $user->id)->latest()->paginate(10);
+        }
 
         return view('backend.pages.leads.index', compact('leads'));
     }

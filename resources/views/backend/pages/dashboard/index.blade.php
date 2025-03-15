@@ -1,72 +1,86 @@
-
 @extends('backend.layouts.master')
 
-@section('title')
-Dashboard Page - Admin Panel
-@endsection
-
+@section('title', 'Dashboard - Admin Panel')
 
 @section('admin-content')
 
-<!-- page title area start -->
+<!-- Page Title Area Start -->
 <div class="page-title-area">
     <div class="row align-items-center">
-        <div class="col-sm-6">
-            <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">Dashboard</h4>
-                <ul class="breadcrumbs pull-left">
-                    <li><a href="index.html">Home</a></li>
+        <div class="col-md-6">
+            <div class="breadcrumbs-area">
+                <h4 class="page-title">Dashboard</h4>
+                <ul class="breadcrumbs">
+                    <li><a href="{{ route('admin.dashboard') }}">Home</a></li>
                     <li><span>Dashboard</span></li>
                 </ul>
             </div>
         </div>
-        <div class="col-sm-6 clearfix">
+        <div class="col-md-6 text-right">
             @include('backend.layouts.partials.logout')
         </div>
     </div>
 </div>
-<!-- page title area end -->
+<!-- Page Title Area End -->
 
 <div class="main-content-inner">
-  <div class="row">
-    <div class="col-lg-8">
-        <div class="row">
-            <div class="col-md-6 mt-5 mb-3">
-                <div class="card">
-                    <div class="seo-fact sbg1">
-                        <a href="{{ route('admin.roles.index') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon"><i class="fa fa-users"></i> Roles</div>
-                                <h2>{{ $total_roles }}</h2>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mt-md-5 mb-3">
-                <div class="card">
-                    <div class="seo-fact sbg2">
-                        <a href="{{ route('admin.admins.index') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon"><i class="fa fa-user"></i> Admins</div>
-                                <h2>{{ $total_admins }}</h2>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3 mb-lg-0">
-                <div class="card">
-                    <div class="seo-fact sbg3">
+    <div class="row">
+        <!-- Total Today Sales -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="seo-fact sbg1">
+                    <a href="{{ route('admin.sales.today') }}">
                         <div class="p-4 d-flex justify-content-between align-items-center">
-                            <div class="seofct-icon">Permissions</div>
-                            <h2>{{ $total_permissions }}</h2>
+                            <div class="seofct-icon"><i class="fa fa-shopping-cart"></i> Today's Sales</div>
+                            <h2 class="text-white">{{ $total_today_sell }}</h2>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
+
+        <!-- Total Sales -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="seo-fact sbg2">
+                    <a href="{{ route('admin.sales.index') }}">
+                        <div class="p-4 d-flex justify-content-between align-items-center">
+                            <div class="seofct-icon"><i class="fa fa-chart-line"></i> Total Sales</div>
+                            <h2 class="text-white">{{ $total_sells }}</h2>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Sales -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="seo-fact sbg3">
+                    <a href="{{ route('admin.sales.monthly') }}">
+                        <div class="p-4 d-flex justify-content-between align-items-center">
+                            <div class="seofct-icon"><i class="fa fa-calendar-alt"></i> Month's Sales</div>
+                            <h2 class="text-white">{{ $this_month_sell }}</h2>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charge Back -->
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="seo-fact sbg4">
+                    <a href="{{ route('admin.sales.chargeback') }}">
+                        <div class="p-4 d-flex justify-content-between align-items-center">
+                            <div class="seofct-icon"><i class="fa fa-exclamation-triangle"></i> Chargebacks</div>
+                            <h2 class="text-white">{{ $total_charge_back }}</h2>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
     </div>
-  </div>
 </div>
 @endsection

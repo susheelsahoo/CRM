@@ -41,6 +41,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::resource('roles', RolesController::class);
     Route::resource('admins', AdminsController::class);
     Route::resource('leads', LeadController::class);
+    Route::get('/sales/today', [SalesController::class, 'todaySales'])->name('sales.today');
+    Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
+    Route::get('/sales/monthly', [SalesController::class, 'monthlySales'])->name('sales.monthly');
+    Route::get('/sales/chargeback', [SalesController::class, 'chargeBack'])->name('sales.chargeback');
+
 
     // Login Routes.
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

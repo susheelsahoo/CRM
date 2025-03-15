@@ -18,9 +18,10 @@ class DashboardController extends Controller
         return view(
             'backend.pages.dashboard.index',
             [
-                'total_admins' => Admin::count(),
-                'total_roles' => Role::count(),
-                'total_permissions' => Permission::count(),
+                'total_today_sell' => 100,
+                'total_sells' => Admin::count(),
+                'this_month_sell' => Role::count(),
+                'total_charge_back' => Permission::count(),
             ]
         );
     }
